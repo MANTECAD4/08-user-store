@@ -1,17 +1,18 @@
-import { envs } from './config/envs';
-import { AppRoutes } from './presentation/routes';
-import { Server } from './presentation/server';
+import { envs } from "./utils/config/envs";
+import { MongoDatabase } from "./data/mongo/mongo-database";
+import { AppRoutes } from "./presentation/routes";
+import { Server } from "./presentation/server";
 
-
-(async()=> {
+(async () => {
   main();
 })();
 
+async function main() {
+  const { MONGO_URL: mongoUrl, MONGO_DB: dbName } = envs();
 
-function main() {
-
+  await MongoDatabase.connect({ mongoUrl, dbName });
   const server = new Server({
-    port: envs.PORT,
+    port: envs().PORT,
     routes: AppRoutes.routes,
   });
 
