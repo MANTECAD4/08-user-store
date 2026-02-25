@@ -1,3 +1,5 @@
+import { UserRoles } from "../../data/mongo/models/user.model";
+import { RegisterUserDto } from "../dtos/auth/register-user.dto";
 import { CustomError } from "../errors/custom-error";
 
 export interface UserEntityOptions {
@@ -6,8 +8,8 @@ export interface UserEntityOptions {
   email: string;
   isEmailValidated: boolean;
   password: string;
-  role: string[];
-  img: string;
+  role: UserRoles[];
+  img?: string;
 }
 
 export class UserEntity {
@@ -16,10 +18,10 @@ export class UserEntity {
   public email: string;
   public isEmailValidated: boolean;
   public password: string;
-  public role: string[];
+  public role: UserRoles[];
   public img?: string;
 
-  constructor(options: UserEntityOptions) {
+  private constructor(options: UserEntityOptions) {
     const { id, name, email, isEmailValidated, password, role, img } = options;
     this.id = id;
     this.name = name;
@@ -30,9 +32,24 @@ export class UserEntity {
     this.img = img;
   }
 
-  public static fromMongoObject = (object: Record<string, any>): UserEntity => {
+  public static createClassic = (
+    id: string,
+    registerUserDto: RegisterUserDto,
+  ) => {
+    return new UserEntity({
+      id,
+      ...registerUserDto,
+      isEmailValidated: false,
+      role: [UserRoles.USER_ROLE],
+    });
+  };
+
+  public static createFromMongoObject = (
+    object: Record<string, any>,
+  ): UserEntity => {
     const { _id, id, name, email, isEmailValidated, password, role, img } =
       object;
+
     if (_id == null && id == null)
       throw CustomError.badRequest("Id field is required. (from UserEntity)");
     if (!name) throw CustomError.badRequest("Name field is required.");

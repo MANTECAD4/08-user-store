@@ -1,8 +1,7 @@
+import { Types } from "mongoose";
 import { UserModel } from "../../data/mongo/models/user.model";
-import {
-  CreateUserOptions,
-  UserDatasource,
-} from "../../domain/datasources/user.datasource";
+import { UserDatasource } from "../../domain/datasources/user.datasource";
+import { RegisterUserDto } from "../../domain/dtos/auth/register-user.dto";
 import { UserEntity } from "../../domain/entities/user.entity";
 
 export class MongoDatasource implements UserDatasource {
@@ -13,13 +12,19 @@ export class MongoDatasource implements UserDatasource {
     return mongoUser !== null ? true : false;
   };
 
-  public createUser = async (
-    options: CreateUserOptions,
+  public registerUser = async (
+    registerUserDto: RegisterUserDto,
   ): Promise<UserEntity> => {
-    const newMongoUser = await UserModel.create(options);
-    await newMongoUser.save();
+    const mongoId = new Types.ObjectId().toString();
 
-    const newUserEntity = UserEntity.fromMongoObject(newMongoUser);
+    const newUserEntity = UserEntity.createClassic(mongoId, registerUserDto);
+    const { id, ...rest } = newUserEntity;
+
+    const newMongoUser = await UserModel.create({
+      _id: mongoId,
+      ...rest,
+    });
+    await newMongoUser.save();
 
     return newUserEntity;
   };

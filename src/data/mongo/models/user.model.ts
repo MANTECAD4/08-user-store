@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+export enum UserRoles {
+  ADMIN_ROLE = "ADMIN_ROLE",
+  USER_ROLE = "USER_ROLE",
+}
+
 export const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -23,8 +28,8 @@ export const UserSchema = new mongoose.Schema({
   },
   role: {
     type: [String],
-    default: ["USER_ROLE"],
-    enum: ["ADMIN_ROLE", "USER_ROLE"],
+    default: [UserRoles.USER_ROLE],
+    enum: [UserRoles.ADMIN_ROLE, UserRoles.USER_ROLE],
   },
 });
 

@@ -6,6 +6,7 @@ import { UserRepository } from "../../domain/repositories/user.repository";
 
 export class AuthService {
   constructor(private readonly userRepository: UserRepository) {}
+
   public registerUser = async (body: Record<string, any>) => {
     const registerUserDto = RegisterUserDto.create(body);
 
@@ -15,7 +16,7 @@ export class AuthService {
     if (isEmailAlreadyUsed)
       throw CustomError.badRequest("Email already registered.");
 
-    const newUser = await this.userRepository.createUser(registerUserDto);
+    const newUser = await this.userRepository.registerUser(registerUserDto);
     const { password, ...rest } = newUser;
     return { user: rest, token: "ABC123" };
   };

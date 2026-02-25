@@ -1,7 +1,5 @@
-import {
-  CreateUserOptions,
-  UserDatasource,
-} from "../../domain/datasources/user.datasource";
+import { UserDatasource } from "../../domain/datasources/user.datasource";
+import { RegisterUserDto } from "../../domain/dtos/auth/register-user.dto";
 import { UserEntity } from "../../domain/entities/user.entity";
 import { UserRepository } from "../../domain/repositories/user.repository";
 
@@ -10,9 +8,9 @@ export class UserRepositoryImpl implements UserRepository {
   public isEmailAlreadyUsed = async (email: string): Promise<boolean> => {
     return this.userDatasource.isEmailAlreadyUsed(email);
   };
-  public createUser = async (
-    options: CreateUserOptions,
+  public registerUser = async (
+    registerUsserDto: RegisterUserDto,
   ): Promise<UserEntity> => {
-    return this.userDatasource.createUser(options);
+    return this.userDatasource.registerUser(registerUsserDto);
   };
 }
