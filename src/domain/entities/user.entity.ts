@@ -30,10 +30,11 @@ export class UserEntity {
     this.img = img;
   }
 
-  public static fromObject = (object: Record<string, any>): UserEntity => {
+  public static fromMongoObject = (object: Record<string, any>): UserEntity => {
     const { _id, id, name, email, isEmailValidated, password, role, img } =
       object;
-    if (!_id && !id) throw CustomError.badRequest("Id field is required.");
+    if (_id == null && id == null)
+      throw CustomError.badRequest("Id field is required. (from UserEntity)");
     if (!name) throw CustomError.badRequest("Name field is required.");
     if (!email) throw CustomError.badRequest("Email field is required.");
     if (isEmailValidated === undefined)
