@@ -24,13 +24,19 @@ export class AuthController {
       .catch((error) => this.handleError(error, res));
   };
 
-  loginUser = async (req: Request, res: Response) => {
+  loginUser = (req: Request, res: Response) => {
     const { body } = req;
-    return res.json("loginUser");
+    this.authService
+      .login(body)
+      .then((result) => res.json(result))
+      .catch((error) => this.handleError(error, res));
   };
 
-  validateEmail = async (req: Request, res: Response) => {
+  validateEmail = (req: Request, res: Response) => {
     const { body } = req;
-    return res.json("validateUser");
+    this.authService
+      .validateUser()
+      .then((result) => res.json(result))
+      .catch((error) => this.handleError(error, res));
   };
 }
