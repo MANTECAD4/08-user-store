@@ -1,14 +1,15 @@
 import { Types } from "mongoose";
 import { UserModel } from "../../data/mongo/models/user.model";
 import { UserDatasource } from "../../domain/datasources/user.datasource";
-import { RegisterUserDto } from "../../domain/dtos/auth/register-user.dto";
 import { UserEntity } from "../../domain/entities/user.entity";
-import { LoginUserDto } from "../../domain/dtos/auth/login-user.dto";
-import { PasswordHasher } from "../../presentation/services/password-hasher.service";
 import { compareSync } from "bcryptjs";
 import { CustomError } from "../../domain/errors/custom-error";
+import { LoginUserDto, RegisterUserDto } from "../../application/dtos";
+import { HasherService } from "../../domain/services/hasher.service";
 
 export class MongoDatasource implements UserDatasource {
+  constructor(private readonly hasherService: HasherService) {}
+
   public isEmailAlreadyUsed = async (email: string): Promise<boolean> => {
     const mongoUser = await UserModel.findOne({
       email,
@@ -26,7 +27,7 @@ export class MongoDatasource implements UserDatasource {
     const newUserEntity = UserEntity.createClassic(mongoId, {
       email,
       name,
-      password: PasswordHasher.hash(password),
+      password: this.hasherService.hash(password),
     });
     const { id, ...rest } = newUserEntity;
 
@@ -47,5 +48,13 @@ export class MongoDatasource implements UserDatasource {
     const passwordMatches = compareSync(password, user!.password);
     if (!passwordMatches || !user) throw CustomError.forbidden("Login denied");
     return UserEntity.createFromMongoObject(user);
+  };
+
+  public validateEmail = async (email: string) => {
+    try {
+      await UserModel.updateOne({ email }, { isEmailValidated: true });
+    } catch (error) {
+      throw CustomError.internalServer("Error while updating user.");
+    }
   };
 }

@@ -1,5 +1,4 @@
-import { LoginUserDto } from "../dtos/auth/login-user.dto";
-import { RegisterUserDto } from "../dtos/auth/register-user.dto";
+import { LoginUserDto, RegisterUserDto } from "../../application/dtos";
 import { UserEntity } from "../entities/user.entity";
 
 export abstract class UserRepository {
@@ -8,4 +7,5 @@ export abstract class UserRepository {
     registerUserDto: RegisterUserDto,
   ) => Promise<UserEntity>;
   abstract login: (loginUserDto: LoginUserDto) => Promise<UserEntity>;
+  abstract validateEmail: (email: string) => Promise<void>;
 }

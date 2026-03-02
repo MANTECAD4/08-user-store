@@ -1,10 +1,16 @@
 import { Router } from "express";
 import { AuthController } from "./controller";
-import { AuthService } from "../services/auth.service";
 import { MongoDatasource } from "../../infraestructure/datasources/mongo-db.datasource";
 import { UserRepositoryImpl } from "../../infraestructure/repositories/user.repository.impl";
-import { EmailService } from "../services/email.service";
+import { NodemailerService } from "../services/nodemailer.service";
 import { envs } from "../../utils/config/envs";
+import { BcryptHasher } from "../services/bcrypt.service";
+import {
+  LoginUseCase,
+  RegisterUserUseCase,
+  ValidateEmailUseCase,
+} from "../../application/use-cases";
+import { JwtGenerator } from "../services/jwt-generator.service";
 
 export class AuthRoutes {
   static get routes(): Router {
@@ -14,18 +20,40 @@ export class AuthRoutes {
       MAILER_EMAIL: mailerEmail,
       REDIRECT_URI: redirectUri,
       REFRESH_TOKEN: refreshToken,
+      JWT_SEED: seed,
+      WEBSERVICE_URL: webServiceUrl,
     } = envs();
     const router = Router();
-    const mongoUserDatasource = new MongoDatasource();
-    const userRepository = new UserRepositoryImpl(mongoUserDatasource);
-    const emailService = new EmailService({
+    const hasherService = new BcryptHasher(10);
+    const tokenGenerator = new JwtGenerator(seed);
+    const emailService = new NodemailerService({
       clientId,
       clientSecret,
       mailerEmail,
       refreshToken,
     });
-    const authService = new AuthService(userRepository, emailService);
-    const authController = new AuthController(authService);
+
+    const mongoUserDatasource = new MongoDatasource(hasherService);
+    const userRepository = new UserRepositoryImpl(mongoUserDatasource);
+    // const authService = new AuthService(userRepository, emailService);
+
+    const registerUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      emailService,
+      tokenGenerator,
+    );
+    const loginUseCase = new LoginUseCase(userRepository, tokenGenerator);
+    const validateEmailUseCase = new ValidateEmailUseCase(
+      userRepository,
+      tokenGenerator,
+    );
+
+    const authController = new AuthController(
+      registerUserUseCase,
+      loginUseCase,
+      validateEmailUseCase,
+      webServiceUrl,
+    );
 
     router.post("/login", authController.loginUser);
     router.post("/register", authController.register);

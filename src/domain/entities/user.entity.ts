@@ -1,5 +1,5 @@
+import { RegisterUserDto } from "../../application/dtos";
 import { UserRoles } from "../../data/mongo/models/user.model";
-import { RegisterUserDto } from "../dtos/auth/register-user.dto";
 import { CustomError } from "../errors/custom-error";
 
 export interface UserEntityOptions {

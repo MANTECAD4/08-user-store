@@ -14,4 +14,6 @@ export const envs = () => ({
   CLIENT_SECRET: get("CLIENT_SECRET").required().asString(),
   REDIRECT_URI: get("REDIRECT_URI").required().asString(),
   REFRESH_TOKEN: get("REFRESH_TOKEN").required().asString(),
+
+  WEBSERVICE_URL: get("WEBSERVICE_URL").required().asString(),
 });

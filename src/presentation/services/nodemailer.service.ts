@@ -1,25 +1,18 @@
 import nodemailer, { Transporter } from "nodemailer";
+import { EmailOptions } from "../../domain/services/email.service";
 
-export interface EmailEnvOptions {
+export interface NodemailerEnvOptions {
   clientId: string;
   clientSecret: string;
   refreshToken: string;
   mailerEmail: string;
 }
 
-export interface EmailOptions {
-  to: string | string[];
-  subject: string;
-  text: string;
-  html: string;
-  token: string;
-}
-
-export class EmailService {
+export class NodemailerService {
   private emailFromInfo = "NanelMtzz <danielmt.002@gmail.com>";
   private transporter: Transporter;
 
-  constructor(envs: EmailEnvOptions) {
+  constructor(envs: NodemailerEnvOptions) {
     const { clientId, clientSecret, refreshToken, mailerEmail } = envs;
 
     this.transporter = nodemailer.createTransport({

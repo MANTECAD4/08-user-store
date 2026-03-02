@@ -1,11 +1,21 @@
 import { Request, Response } from "express";
 import { CustomError } from "../../domain/errors/custom-error";
-import { RegisterUserDto } from "../../domain/dtos/auth/register-user.dto";
-import { AuthService } from "../services/auth.service";
+import {
+  LoginUseCase,
+  RegisterUserUseCase,
+  ValidateEmailUseCase,
+} from "../../application/use-cases";
+import { envs } from "../../utils/config/envs";
+// import { AuthService } from "../services/auth.service";
 
 export class AuthController {
   // DI
-  constructor(public readonly authService: AuthService) {}
+  constructor(
+    private readonly registerUserUseCase: RegisterUserUseCase,
+    private readonly loginUseCase: LoginUseCase,
+    private readonly validateEmailUseCase: ValidateEmailUseCase,
+    private readonly webServiceUrl: string,
+  ) {}
 
   private handleError = (error: unknown, res: Response) => {
     if (error instanceof CustomError) {
@@ -18,25 +28,26 @@ export class AuthController {
   register = (req: Request, res: Response) => {
     const { body } = req;
 
-    this.authService
-      .registerUser(body)
+    this.registerUserUseCase
+      .execute(body, this.webServiceUrl)
       .then((result) => res.status(201).json(result))
       .catch((error) => this.handleError(error, res));
   };
 
   loginUser = (req: Request, res: Response) => {
     const { body } = req;
-    this.authService
-      .login(body)
+    this.loginUseCase
+      .execute(body)
       .then((result) => res.json(result))
       .catch((error) => this.handleError(error, res));
   };
 
   validateEmail = (req: Request, res: Response) => {
-    const { body } = req;
-    this.authService
-      .validateUser()
-      .then((result) => res.json(result))
+    const { token } = req.params;
+    if (!token) throw CustomError.badRequest("Missing Jwt Token...");
+    this.validateEmailUseCase
+      .execute(token)
+      .then(() => res.json("Email validated"))
       .catch((error) => this.handleError(error, res));
   };
 }

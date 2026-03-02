@@ -1,11 +1,13 @@
 import jwt from "jsonwebtoken";
 import { CustomError } from "../../domain/errors/custom-error";
 import { envs } from "../../utils/config/envs";
-export class JwtGenerator {
-  public static generate = async (payload: any, duration: string = "2h") => {
-    const { JWT_SEED } = envs();
+import { TokenGenerator } from "../../domain/services/token-generator.service";
+export class JwtGenerator implements TokenGenerator {
+  constructor(private readonly seed: string) {}
+
+  public generate = async (payload: any, duration?: number) => {
     return new Promise((resolve) => {
-      jwt.sign(payload, JWT_SEED, { expiresIn: "2h" }, (err, token) => {
+      jwt.sign(payload, this.seed, { expiresIn: "2h" }, (err, token) => {
         if (err) {
           console.log(err);
           throw CustomError.internalServer(
@@ -13,6 +15,18 @@ export class JwtGenerator {
           );
         }
         return resolve(token);
+      });
+    });
+  };
+
+  public validate = (token: string): Promise<any> => {
+    return new Promise((resolve) => {
+      jwt.verify(token, this.seed, (err, decoded) => {
+        if (err) {
+          console.log(err);
+          throw CustomError.unauthorized(`Invalid token`);
+        }
+        return resolve(decoded);
       });
     });
   };

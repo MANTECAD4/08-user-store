@@ -1,5 +1,5 @@
+import { CustomError } from "../../../domain/errors/custom-error";
 import { regularExpressions } from "../../../utils/helpers/regular-exp.helper";
-import { CustomError } from "../../errors/custom-error";
 
 export interface RegisterUserDtoOptions {
   name: string;
