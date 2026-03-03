@@ -1,7 +1,6 @@
 import { CustomError } from "../../../domain/errors/custom-error";
 import { UserRepository } from "../../../domain/repositories/user.repository";
 import { TokenGenerator } from "../../../domain/services/token-generator.service";
-import { JwtGenerator } from "../../../presentation/services/jwt-generator.service";
 
 export class ValidateEmailUseCase {
   constructor(

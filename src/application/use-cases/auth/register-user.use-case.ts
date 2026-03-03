@@ -1,7 +1,6 @@
 import { CustomError } from "../../../domain/errors/custom-error";
 import { UserRepository } from "../../../domain/repositories/user.repository";
 import { TokenGenerator } from "../../../domain/services/token-generator.service";
-import { envs } from "../../../utils/config/envs";
 import { RegisterUserDto } from "../../dtos";
 import { EmailService } from "../../../domain/services/email.service";
 

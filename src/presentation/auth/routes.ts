@@ -2,15 +2,15 @@ import { Router } from "express";
 import { AuthController } from "./controller";
 import { MongoDatasource } from "../../infraestructure/datasources/mongo-db.datasource";
 import { UserRepositoryImpl } from "../../infraestructure/repositories/user.repository.impl";
-import { NodemailerService } from "../services/nodemailer.service";
+import { NodemailerService } from "../../infraestructure/services/nodemailer.service";
 import { envs } from "../../utils/config/envs";
-import { BcryptHasher } from "../services/bcrypt.service";
+import { BcryptHasher } from "../../infraestructure/services/bcrypt.service";
 import {
   LoginUseCase,
   RegisterUserUseCase,
   ValidateEmailUseCase,
 } from "../../application/use-cases";
-import { JwtGenerator } from "../services/jwt-generator.service";
+import { JwtGenerator } from "../../infraestructure/services/jwt-generator.service";
 
 export class AuthRoutes {
   static get routes(): Router {
@@ -23,7 +23,10 @@ export class AuthRoutes {
       JWT_SEED: seed,
       WEBSERVICE_URL: webServiceUrl,
     } = envs();
+
     const router = Router();
+
+    // ! SERVICES
     const hasherService = new BcryptHasher(10);
     const tokenGenerator = new JwtGenerator(seed);
     const emailService = new NodemailerService({
@@ -33,10 +36,12 @@ export class AuthRoutes {
       refreshToken,
     });
 
+    //! DATASOURCE & REPOSITORY
     const mongoUserDatasource = new MongoDatasource(hasherService);
     const userRepository = new UserRepositoryImpl(mongoUserDatasource);
     // const authService = new AuthService(userRepository, emailService);
 
+    // ! USE CASES
     const registerUserUseCase = new RegisterUserUseCase(
       userRepository,
       emailService,

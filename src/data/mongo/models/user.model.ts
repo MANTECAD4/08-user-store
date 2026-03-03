@@ -5,7 +5,7 @@ export enum UserRoles {
   USER_ROLE = "USER_ROLE",
 }
 
-export const UserSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"],

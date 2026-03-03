@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import { CustomError } from "../../domain/errors/custom-error";
-import { envs } from "../../utils/config/envs";
 import { TokenGenerator } from "../../domain/services/token-generator.service";
 export class JwtGenerator implements TokenGenerator {
   constructor(private readonly seed: string) {}
@@ -11,7 +10,7 @@ export class JwtGenerator implements TokenGenerator {
         if (err) {
           console.log(err);
           throw CustomError.internalServer(
-            "Inertnal server error (error in jwt generator). Check logs.",
+            "Internal server error (error in jwt generator). Check logs.",
           );
         }
         return resolve(token);
