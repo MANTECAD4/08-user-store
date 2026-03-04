@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthController } from "./controller";
-import { MongoDatasource } from "../../infraestructure/datasources/mongo-db.datasource";
+import { MongoUserDatasource } from "../../infraestructure/datasources/mongo-user.datasource";
 import { UserRepositoryImpl } from "../../infraestructure/repositories/user.repository.impl";
 import { NodemailerService } from "../../infraestructure/services/nodemailer.service";
 import { envs } from "../../utils/config/envs";
@@ -37,7 +37,7 @@ export class AuthRoutes {
     });
 
     //! DATASOURCE & REPOSITORY
-    const mongoUserDatasource = new MongoDatasource(hasherService);
+    const mongoUserDatasource = new MongoUserDatasource(hasherService);
     const userRepository = new UserRepositoryImpl(mongoUserDatasource);
     // const authService = new AuthService(userRepository, emailService);
 

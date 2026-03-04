@@ -3,7 +3,7 @@ import mongoose, { Types, Schema } from "mongoose";
 const ProductSchema = new mongoose.Schema({
   name: {
     type: String,
-    required_: [true, "Name is required."],
+    required: [true, "Name is required."],
   },
   isAvailable: {
     type: Boolean,

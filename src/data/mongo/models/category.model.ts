@@ -9,7 +9,7 @@ const CategorySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  use: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "user",
     required: true,

@@ -1,4 +1,4 @@
-export * from "./models/category.modle";
-export * from "./models/product.category";
+export * from "./models/category.model";
+export * from "./models/product.model";
 export * from "./models/user.model";
 export * from "./mongo-database";

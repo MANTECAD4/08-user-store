@@ -7,7 +7,7 @@ import { CustomError } from "../../domain/errors/custom-error";
 import { LoginUserDto, RegisterUserDto } from "../../application/dtos";
 import { HasherService } from "../../domain/services/hasher.service";
 
-export class MongoDatasource implements UserDatasource {
+export class MongoUserDatasource implements UserDatasource {
   constructor(private readonly hasherService: HasherService) {}
 
   public isEmailAlreadyUsed = async (email: string): Promise<boolean> => {
