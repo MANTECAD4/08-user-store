@@ -2,7 +2,8 @@ import { LoginUserDto, RegisterUserDto } from "../../application/dtos";
 import { UserEntity } from "../entities/user.entity";
 
 export abstract class UserRepository {
-  abstract isEmailAlreadyUsed: (email: string) => Promise<boolean>;
+  abstract getUserByEmail: (email: string) => Promise<UserEntity | null>;
+  abstract getUserById: (id: string) => Promise<UserEntity | null>;
   abstract registerUser: (
     registerUserDto: RegisterUserDto,
   ) => Promise<UserEntity>;

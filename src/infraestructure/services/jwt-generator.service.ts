@@ -18,14 +18,14 @@ export class JwtGenerator implements TokenGenerator {
     });
   };
 
-  public validate = (token: string): Promise<any> => {
+  public validate = <T>(token: string): Promise<T | null> => {
     return new Promise((resolve) => {
       jwt.verify(token, this.seed, (err, decoded) => {
         if (err) {
           console.log(err);
           throw CustomError.unauthorized(`Invalid token`);
         }
-        return resolve(decoded);
+        return resolve(decoded as T);
       });
     });
   };

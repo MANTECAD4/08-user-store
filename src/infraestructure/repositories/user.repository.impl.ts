@@ -6,8 +6,11 @@ import { UserRepository } from "../../domain/repositories/user.repository";
 
 export class UserRepositoryImpl implements UserRepository {
   constructor(private readonly userDatasource: UserDatasource) {}
-  public isEmailAlreadyUsed = async (email: string): Promise<boolean> => {
-    return this.userDatasource.isEmailAlreadyUsed(email);
+  public getUserByEmail = async (email: string): Promise<UserEntity | null> => {
+    return this.userDatasource.getUserByEmail(email);
+  };
+  public getUserById = async (email: string): Promise<UserEntity | null> => {
+    return this.userDatasource.getUserById(email);
   };
   public registerUser = async (
     registerUsserDto: RegisterUserDto,

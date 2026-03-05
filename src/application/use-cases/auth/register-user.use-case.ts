@@ -38,11 +38,10 @@ export class RegisterUserUseCase {
   execute = async (body: Record<string, any>, webServiceLink: string) => {
     const registerUserDto = RegisterUserDto.create(body);
 
-    const isEmailAlreadyUsed = await this.userRepository.isEmailAlreadyUsed(
+    const user = await this.userRepository.getUserByEmail(
       registerUserDto.email,
     );
-    if (isEmailAlreadyUsed)
-      throw CustomError.badRequest("Email already registered.");
+    if (user) throw CustomError.badRequest("Email already registered.");
 
     const newUser = await this.userRepository.registerUser(registerUserDto);
     const { password, ...rest } = newUser;

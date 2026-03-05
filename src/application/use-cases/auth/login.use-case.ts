@@ -16,12 +16,9 @@ export class LoginUseCase {
 
     const loginuserDto = LoginUserDto.create(body);
 
-    const isEmailAlreadyUsed = await this.userRepository.isEmailAlreadyUsed(
-      loginuserDto.email,
-    );
+    const user = await this.userRepository.getUserByEmail(loginuserDto.email);
 
-    if (!isEmailAlreadyUsed)
-      throw CustomError.notFound(`Email not linked to an account.`);
+    if (!user) throw CustomError.notFound(`Email not linked to an account.`);
     const { password, ...rest } = await this.userRepository.login(loginuserDto);
 
     const token = await this.tokenGenerator.generate({ id: rest.id });

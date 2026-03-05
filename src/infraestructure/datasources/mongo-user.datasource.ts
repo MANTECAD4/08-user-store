@@ -10,11 +10,20 @@ import { HasherService } from "../../domain/services/hasher.service";
 export class MongoUserDatasource implements UserDatasource {
   constructor(private readonly hasherService: HasherService) {}
 
-  public isEmailAlreadyUsed = async (email: string): Promise<boolean> => {
+  public getUserByEmail = async (email: string): Promise<UserEntity | null> => {
     const mongoUser = await UserModel.findOne({
       email,
     });
-    return mongoUser !== null ? true : false;
+    if (!mongoUser) return null;
+    const userEntity = UserEntity.createFromMongoObject(mongoUser);
+    return userEntity;
+  };
+
+  public getUserById = async (id: string): Promise<UserEntity | null> => {
+    const mongoUser = await UserModel.findById(id);
+    if (!mongoUser) return null;
+    const userEntity = UserEntity.createFromMongoObject(mongoUser);
+    return userEntity;
   };
 
   public registerUser = async ({
