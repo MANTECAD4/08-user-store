@@ -8,13 +8,13 @@ export class ValidateEmailUseCase {
     private readonly tokenGenerator: TokenGenerator,
   ) {}
   execute = async (token: string) => {
-    const { email } = await this.tokenGenerator.validate(token);
-    if (!email)
+    const payload = await this.tokenGenerator.validate(token);
+    if (!payload)
       throw CustomError.internalServer(
-        "Email not found in payload (check source of token generation)",
+        "Payload not found (check source of token generation)",
       );
     // if (!regularExpressions().emails.test(decodedPayload))
     //   throw CustomError.internalServer("Recieved email is not valid.");
-    return await this.userRepository.validateEmail(email);
+    return await this.userRepository.validateEmail(payload.sub);
   };
 }

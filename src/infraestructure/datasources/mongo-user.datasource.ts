@@ -59,9 +59,9 @@ export class MongoUserDatasource implements UserDatasource {
     return UserEntity.createFromMongoObject(user);
   };
 
-  public validateEmail = async (email: string) => {
+  public validateEmail = async (id: string) => {
     try {
-      await UserModel.updateOne({ email }, { isEmailValidated: true });
+      await UserModel.updateOne({ _id: id }, { isEmailValidated: true });
     } catch (error) {
       throw CustomError.internalServer("Error while updating user.");
     }

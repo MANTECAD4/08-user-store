@@ -9,5 +9,5 @@ export abstract class UserDatasource {
     registerUserDto: RegisterUserDto,
   ) => Promise<UserEntity>;
   abstract login: (loginUserDto: LoginUserDto) => Promise<UserEntity>;
-  abstract validateEmail: (email: string) => Promise<void>;
+  abstract validateEmail: (id: string) => Promise<void>;
 }

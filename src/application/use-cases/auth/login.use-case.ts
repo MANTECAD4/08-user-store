@@ -21,7 +21,7 @@ export class LoginUseCase {
     if (!user) throw CustomError.notFound(`Email not linked to an account.`);
     const { password, ...rest } = await this.userRepository.login(loginuserDto);
 
-    const token = await this.tokenGenerator.generate({ id: rest.id });
+    const token = await this.tokenGenerator.generate({ sub: rest.id });
 
     return {
       user: rest,

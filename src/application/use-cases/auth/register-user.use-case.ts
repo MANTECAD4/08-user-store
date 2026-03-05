@@ -12,11 +12,12 @@ export class RegisterUserUseCase {
   ) {}
 
   private sendEmailValidation = async (
+    id: string,
     email: string,
     webServiceUrl: string,
   ) => {
     try {
-      const token = await this.tokenGenerator.generate({ email });
+      const token = await this.tokenGenerator.generate({ sub: id });
       const link = `${webServiceUrl}/auth/validate-email/${token}`;
       await this.emailService.sendEmail({
         to: email,
@@ -46,9 +47,9 @@ export class RegisterUserUseCase {
     const newUser = await this.userRepository.registerUser(registerUserDto);
     const { password, ...rest } = newUser;
 
-    const token = await this.tokenGenerator.generate({ id: rest.id });
+    const token = await this.tokenGenerator.generate({ sub: rest.id });
 
-    await this.sendEmailValidation(rest.email, webServiceLink);
+    await this.sendEmailValidation(rest.id, rest.email, webServiceLink);
 
     return { user: rest, token };
   };

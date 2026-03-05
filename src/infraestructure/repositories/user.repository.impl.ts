@@ -20,7 +20,7 @@ export class UserRepositoryImpl implements UserRepository {
   public login = (loginUserDto: LoginUserDto) => {
     return this.userDatasource.login(loginUserDto);
   };
-  public validateEmail = async (email: string) => {
-    return this.userDatasource.validateEmail(email);
+  public validateEmail = async (id: string) => {
+    return this.userDatasource.validateEmail(id);
   };
 }
