@@ -11,7 +11,7 @@ export class JwtGenerator implements TokenGenerator {
     return new Promise((resolve) => {
       jwt.sign(payload, this.seed, { expiresIn: "2h" }, (err, token) => {
         if (err) {
-          console.log(err);
+          // console.log(err);
           throw CustomError.internalServer(
             "Internal server error (error in jwt generator). Check logs.",
           );
@@ -25,7 +25,7 @@ export class JwtGenerator implements TokenGenerator {
     return new Promise((resolve) => {
       jwt.verify(token, this.seed, (err, decoded) => {
         if (err) {
-          console.log(err);
+          // console.log(err);
           throw CustomError.unauthorized(`Invalid token`);
         }
         return resolve(decoded as TokenPayload);

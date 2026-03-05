@@ -1,0 +1,35 @@
+import { CustomError } from "../../../domain/errors/custom-error";
+
+export class CreateCategoryDto {
+  private constructor(
+    public readonly name: string,
+    public readonly isAvailable: boolean,
+    public readonly userId: string,
+  ) {}
+
+  public static create = (body: Record<string, any>) => {
+    const {
+      name,
+      "auth-token-payload": { sub },
+      isAvailable,
+    } = body;
+
+    if (!name) throw CustomError.badRequest("Category name is required.");
+
+    if (isAvailable === undefined)
+      throw CustomError.badRequest("Category requires isAvailable property");
+
+    if (!sub)
+      throw CustomError.internalServer(
+        `User not found. An user needs to be linked to category's creation`,
+      );
+
+    const rawIsAvailable = isAvailable.toLowerCase();
+    if (rawIsAvailable !== "false" && rawIsAvailable !== "true")
+      throw CustomError.badRequest("Invalid value for isAvailable property");
+
+    const booleanIsAvaibale = rawIsAvailable === "true";
+
+    return new CreateCategoryDto(name, booleanIsAvaibale, sub);
+  };
+}
