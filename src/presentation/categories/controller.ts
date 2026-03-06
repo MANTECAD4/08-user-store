@@ -10,7 +10,7 @@ export class CategoriesController {
   ) {}
   public getCategories = (req: Request, res: Response) => {
     return this.getCategoryiesUseCase
-      .execute()
+      .execute(req.query)
       .then((result) => res.json(result))
       .catch((error) => CustomError.handleError(error, res));
   };

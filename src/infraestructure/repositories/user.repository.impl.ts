@@ -13,9 +13,9 @@ export class UserRepositoryImpl implements UserRepository {
     return this.userDatasource.getUserById(email);
   };
   public registerUser = async (
-    registerUsserDto: RegisterUserDto,
+    registerUserDto: RegisterUserDto,
   ): Promise<UserEntity> => {
-    return this.userDatasource.registerUser(registerUsserDto);
+    return this.userDatasource.registerUser(registerUserDto);
   };
   public login = (loginUserDto: LoginUserDto) => {
     return this.userDatasource.login(loginUserDto);

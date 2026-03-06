@@ -4,11 +4,17 @@ import { CategoryDatasource } from "../../domain/datasources";
 import { CategoryEntity } from "../../domain/entities";
 import { CategoryModel } from "../../data/mongo";
 import { CustomError } from "../../domain/errors/custom-error";
+import { PaginationDto } from "../../application/dtos/shared/pagination.dto";
 
 export class MongoCategoryDatasource implements CategoryDatasource {
-  public getCategories = async (): Promise<CategoryEntity[]> => {
+  public getCategories = async (
+    paginationDto: PaginationDto,
+  ): Promise<CategoryEntity[]> => {
+    const { limit, page } = paginationDto;
     try {
-      const mongoCategories = await CategoryModel.find();
+      const mongoCategories = await CategoryModel.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
       const categoryEntities = mongoCategories.map(
         ({ _id, name, isAvailable, userId }) =>
           new CategoryEntity({
@@ -26,11 +32,12 @@ export class MongoCategoryDatasource implements CategoryDatasource {
     }
   };
 
-  public createCategory = async ({
-    isAvailable,
-    name,
-    userId,
-  }: CreateCategoryDto): Promise<CategoryEntity> => {
+  public createCategory = async (
+    createCategoryDto: CreateCategoryDto,
+
+    // xd:string
+  ): Promise<CategoryEntity> => {
+    const { isAvailable, name, userId } = createCategoryDto;
     try {
       const id = new Types.ObjectId().toString();
       const newCategoryEntity = new CategoryEntity({
