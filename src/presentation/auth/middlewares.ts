@@ -20,11 +20,10 @@ export class AuthMiddlewares {
     try {
       const payload = await this.tokenGenerator.validate(token);
       if (!payload) return res.status(401).json({ error: "Invalid token." });
-      req.body["auth-token-payload"] = payload;
-      console.log(req.body);
+      req.body["user"] = payload.sub;
+      // console.log(req.body);
       next();
     } catch (error) {
-      console.log("enter here");
       return CustomError.handleError(error, res);
     }
   };

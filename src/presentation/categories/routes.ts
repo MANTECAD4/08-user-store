@@ -22,6 +22,7 @@ export class CategoriesRoutes {
 
     const createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
     const getCategoriesUseCase = new GetCategoriesUseCase(categoryRepository);
+
     const categoriesController = new CategoriesController(
       createCategoryUseCase,
       getCategoriesUseCase,

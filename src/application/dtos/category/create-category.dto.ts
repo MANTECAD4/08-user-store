@@ -8,18 +8,14 @@ export class CreateCategoryDto {
   ) {}
 
   public static create = (body: Record<string, any>) => {
-    const {
-      name,
-      "auth-token-payload": { sub },
-      isAvailable,
-    } = body;
+    const { name, user, isAvailable } = body;
 
     if (!name) throw CustomError.badRequest("Category name is required.");
 
     if (isAvailable === undefined)
       throw CustomError.badRequest("Category requires isAvailable property");
 
-    if (!sub)
+    if (!user)
       throw CustomError.internalServer(
         `User not found. An user needs to be linked to category's creation`,
       );
@@ -30,6 +26,6 @@ export class CreateCategoryDto {
 
     const booleanIsAvaibale = rawIsAvailable === "true";
 
-    return new CreateCategoryDto(name, booleanIsAvaibale, sub);
+    return new CreateCategoryDto(name, booleanIsAvaibale, user);
   };
 }
