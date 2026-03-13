@@ -24,8 +24,8 @@ export class CreateCategoryDto {
     if (rawIsAvailable !== "false" && rawIsAvailable !== "true")
       throw CustomError.badRequest("Invalid value for isAvailable property");
 
-    const booleanIsAvaibale = rawIsAvailable === "true";
+    const booleanIsAvailable = rawIsAvailable === "true";
 
-    return new CreateCategoryDto(name, booleanIsAvaibale, user);
+    return new CreateCategoryDto(name, booleanIsAvailable, user);
   };
 }

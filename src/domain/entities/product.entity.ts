@@ -1,4 +1,5 @@
 export interface ProductOptions {
+  id: string;
   name: string;
   isAvailable: boolean;
   price: number;
@@ -8,6 +9,7 @@ export interface ProductOptions {
 }
 
 export class ProductEntity {
+  public id: string;
   public name: string;
   public isAvailable: boolean;
   public price: number;
@@ -16,9 +18,10 @@ export class ProductEntity {
   public categoryId: string;
 
   private constructor(options: ProductOptions) {
-    const { categoryId, userId, description, isAvailable, name, price } =
+    const { categoryId, userId, description, isAvailable, name, price, id } =
       options;
 
+    this.id = id;
     this.name = name;
     this.isAvailable = isAvailable;
     this.price = price;
@@ -27,12 +30,7 @@ export class ProductEntity {
     this.categoryId = categoryId;
   }
 
-  public create = (
-    options: Omit<ProductOptions, "isAvailable">,
-  ): ProductEntity => {
-    return new ProductEntity({
-      ...options,
-      isAvailable: false,
-    });
+  public static create = (options: ProductOptions): ProductEntity => {
+    return new ProductEntity(options);
   };
 }
