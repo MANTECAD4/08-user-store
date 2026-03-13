@@ -1,3 +1,5 @@
+import { CustomError } from "../errors/custom-error";
+
 export interface ProductOptions {
   id: string;
   name: string;
@@ -30,7 +32,35 @@ export class ProductEntity {
     this.categoryId = categoryId;
   }
 
-  public static create = (options: ProductOptions): ProductEntity => {
+  public static createFromObject = (options: ProductOptions): ProductEntity => {
+    const { categoryId, description, id, isAvailable, name, price, userId } =
+      options;
+    if (!name)
+      throw CustomError.badRequest(
+        "Name is required to create a new Product entity",
+      );
+    if (!description)
+      throw CustomError.badRequest(
+        "Description is required to create a new Product entity",
+      );
+    if (!id)
+      throw CustomError.badRequest("Missing Id to create Prodduct entity");
+    if (isAvailable === undefined)
+      throw CustomError.badRequest(
+        "Missing isAvailable property to create Prodduct entity",
+      );
+    if (!price)
+      throw CustomError.badRequest(
+        "Missing price property to create Prodduct entity",
+      );
+    if (!categoryId)
+      throw CustomError.badRequest(
+        "Missing categoryId property to create Prodduct entity",
+      );
+    if (!userId)
+      throw CustomError.badRequest(
+        "Missing userId property to create Prodduct entity",
+      );
     return new ProductEntity(options);
   };
 }

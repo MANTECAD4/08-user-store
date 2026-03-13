@@ -10,7 +10,30 @@ export class MongoProductDatasource implements ProductDatasource {
   public getProducts = async (
     paginationDto: PaginationDto,
   ): Promise<ProductEntity[]> => {
-    return [];
+    const { limit, page } = paginationDto;
+    try {
+      const mongoProducts = await ProductModel.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+      const productEntities = mongoProducts.map(
+        ({ _id, isAvailable, name, description, userId, categoryId, price }) =>
+          ProductEntity.createFromObject({
+            id: _id.toString(),
+            name,
+            description,
+            price,
+            isAvailable,
+            categoryId: categoryId.toString(),
+            userId: userId.toString(),
+          }),
+      );
+      return productEntities;
+    } catch (error) {
+      throw CustomError.internalServer(
+        "Something went wrong while loading products from DB",
+      );
+    }
   };
 
   public createProduct = async (
@@ -20,7 +43,7 @@ export class MongoProductDatasource implements ProductDatasource {
       createProductDto;
     try {
       const id = new Types.ObjectId().toString();
-      const newProductEntity = ProductEntity.create({
+      const newProductEntity = ProductEntity.createFromObject({
         id,
         name,
         description,

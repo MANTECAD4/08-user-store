@@ -6,6 +6,7 @@ import { envs } from "../../utils/config/envs";
 import { CreateProductUseCase } from "../../application/use-cases/product/create-product.use-case";
 import { ProductRepositoryImpl } from "../../infraestructure/repositories/product.repository.impl";
 import { MongoProductDatasource } from "../../infraestructure/datasources/mongo-product.datasource";
+import { GetProductsUseCase } from "../../application/use-cases/product/get-products.use-case";
 
 export class ProductsRoutes {
   static get routes(): Router {
@@ -19,7 +20,11 @@ export class ProductsRoutes {
     const productRepository = new ProductRepositoryImpl(productDatasource);
 
     const createProductUseCase = new CreateProductUseCase(productRepository);
-    const productsController = new ProductsController(createProductUseCase);
+    const getProductsUseCase = new GetProductsUseCase(productRepository);
+    const productsController = new ProductsController(
+      getProductsUseCase,
+      createProductUseCase,
+    );
     router.get("/", productsController.getProducts);
     router.post(
       "/",
