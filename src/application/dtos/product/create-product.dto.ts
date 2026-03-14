@@ -6,8 +6,8 @@ export class CreateProductDto {
     public readonly isAvailable: boolean,
     public readonly price: number,
     public readonly description: string,
-    public readonly userId: string,
-    public readonly categoryId: string,
+    public readonly user: string,
+    public readonly category: string,
   ) {}
 
   public static create = (body: Record<string, any>): CreateProductDto => {

@@ -15,10 +15,11 @@ export class MongoCategoryDatasource implements CategoryDatasource {
       const mongoCategories = await CategoryModel.find()
         .skip((page - 1) * limit)
         .limit(limit);
+
       const categoryEntities = mongoCategories.map(
-        ({ _id, name, isAvailable, userId }) =>
+        ({ _id, name, isAvailable, user }) =>
           new CategoryEntity({
-            userId: userId.toString(),
+            user: user.toString(),
             id: _id.toString(),
             name,
             isAvailable,
@@ -37,20 +38,20 @@ export class MongoCategoryDatasource implements CategoryDatasource {
 
     // xd:string
   ): Promise<CategoryEntity> => {
-    const { isAvailable, name, userId } = createCategoryDto;
+    const { isAvailable, name, user } = createCategoryDto;
     try {
       const id = new Types.ObjectId().toString();
       const newCategoryEntity = new CategoryEntity({
         id,
         name,
         isAvailable,
-        userId,
+        user,
       });
       const newMongoCategory = await CategoryModel.create({
         _id: id,
         name,
         isAvailable,
-        userId: userId,
+        user,
       });
       return newCategoryEntity;
     } catch (error) {

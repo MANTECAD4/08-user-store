@@ -9,11 +9,12 @@ const CategorySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  userId: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "user",
     required: true,
   },
 });
+CategorySchema.set("toJSON", {});
 
 export const CategoryModel = mongoose.model("category", CategorySchema);

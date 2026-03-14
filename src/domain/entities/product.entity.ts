@@ -6,8 +6,8 @@ export interface ProductOptions {
   isAvailable: boolean;
   price: number;
   description: string;
-  userId: string;
-  categoryId: string;
+  user: string;
+  category: string;
 }
 
 export class ProductEntity {
@@ -16,11 +16,11 @@ export class ProductEntity {
   public isAvailable: boolean;
   public price: number;
   public description: string;
-  public userId: string;
-  public categoryId: string;
+  public user: string;
+  public category: string;
 
   private constructor(options: ProductOptions) {
-    const { categoryId, userId, description, isAvailable, name, price, id } =
+    const { category, user, description, isAvailable, name, price, id } =
       options;
 
     this.id = id;
@@ -28,12 +28,12 @@ export class ProductEntity {
     this.isAvailable = isAvailable;
     this.price = price;
     this.description = description;
-    this.userId = userId;
-    this.categoryId = categoryId;
+    this.user = user;
+    this.category = category;
   }
 
   public static createFromObject = (options: ProductOptions): ProductEntity => {
-    const { categoryId, description, id, isAvailable, name, price, userId } =
+    const { category, description, id, isAvailable, name, price, user } =
       options;
     if (!name)
       throw CustomError.badRequest(
@@ -53,13 +53,13 @@ export class ProductEntity {
       throw CustomError.badRequest(
         "Missing price property to create Prodduct entity",
       );
-    if (!categoryId)
+    if (!category)
       throw CustomError.badRequest(
-        "Missing categoryId property to create Prodduct entity",
+        "Missing category property to create Prodduct entity",
       );
-    if (!userId)
+    if (!user)
       throw CustomError.badRequest(
-        "Missing userId property to create Prodduct entity",
+        "Missing user property to create Prodduct entity",
       );
     return new ProductEntity(options);
   };

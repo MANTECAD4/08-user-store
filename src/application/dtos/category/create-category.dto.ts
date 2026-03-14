@@ -4,7 +4,7 @@ export class CreateCategoryDto {
   private constructor(
     public readonly name: string,
     public readonly isAvailable: boolean,
-    public readonly userId: string,
+    public readonly user: string,
   ) {}
 
   public static create = (body: Record<string, any>) => {

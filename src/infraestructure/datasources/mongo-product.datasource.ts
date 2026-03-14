@@ -24,12 +24,13 @@ export class MongoProductDatasource implements ProductDatasource {
             description,
             price,
             isAvailable,
-            categoryId: categoryId.toString(),
-            userId: userId.toString(),
+            category: categoryId.toString(),
+            user: userId.toString(),
           }),
       );
       return productEntities;
     } catch (error) {
+      console.log(error);
       throw CustomError.internalServer(
         "Something went wrong while loading products from DB",
       );
@@ -39,7 +40,7 @@ export class MongoProductDatasource implements ProductDatasource {
   public createProduct = async (
     createProductDto: CreateProductDto,
   ): Promise<ProductEntity> => {
-    const { categoryId, description, isAvailable, name, price, userId } =
+    const { category, description, isAvailable, name, price, user } =
       createProductDto;
     try {
       const id = new Types.ObjectId().toString();
@@ -48,8 +49,8 @@ export class MongoProductDatasource implements ProductDatasource {
         name,
         description,
         price,
-        categoryId,
-        userId,
+        category,
+        user,
         isAvailable,
       });
       const newMongoProduct = await ProductModel.create(newProductEntity);

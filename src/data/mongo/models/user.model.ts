@@ -32,5 +32,8 @@ const UserSchema = new mongoose.Schema({
     enum: [UserRoles.ADMIN_ROLE, UserRoles.USER_ROLE],
   },
 });
+UserSchema.set("toJSON", {
+  versionKey: false,
+});
 
 export const UserModel = mongoose.model("user", UserSchema);
