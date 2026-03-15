@@ -17,7 +17,15 @@ export class MongoProductDatasource implements ProductDatasource {
         .limit(limit);
 
       const productEntities = mongoProducts.map(
-        ({ _id, isAvailable, name, description, userId, categoryId, price }) =>
+        ({
+          _id,
+          isAvailable,
+          name,
+          description,
+          user: userId,
+          category: categoryId,
+          price,
+        }) =>
           ProductEntity.createFromObject({
             id: _id.toString(),
             name,

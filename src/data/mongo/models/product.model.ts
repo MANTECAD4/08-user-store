@@ -17,12 +17,12 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: [true, "Description is required."],
   },
-  userId: {
+  user: {
     type: Types.ObjectId,
     ref: "user",
     required: true,
   },
-  categoryId: {
+  category: {
     type: Schema.Types.ObjectId,
     ref: "category",
     required: true,

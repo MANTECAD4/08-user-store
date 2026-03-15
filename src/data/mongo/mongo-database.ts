@@ -14,4 +14,7 @@ export class MongoDatabase {
       throw new Error(`Connection failed. Error: ${error}`);
     }
   }
+  static disconnect = async () => {
+    await mongoose.disconnect();
+  };
 }
